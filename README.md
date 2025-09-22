@@ -86,12 +86,56 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Supported Blockchains
 
-Currently supported blockchain networks:
+The SDK supports a wide range of blockchain networks, including both EVM-compatible and non-EVM chains:
+
+### EVM-Compatible Chains
 
 - **Ethereum** (`Chain::Eth`) - Ethereum mainnet
 - **BSC** (`Chain::Bsc`) - Binance Smart Chain
 - **Arbitrum** (`Chain::Arbitrum`) - Arbitrum One
 - **Polygon** (`Chain::Polygon`) - Polygon network
+- **Base** (`Chain::Base`) - Base network
+- **Linea** (`Chain::Linea`) - Linea network
+- **Fantom** (`Chain::Fantom`) - Fantom Opera
+- **Avalanche** (`Chain::Avalanche`) - Avalanche C-Chain
+- **Optimism** (`Chain::Optimism`) - Optimism
+- **Moonriver** (`Chain::Moonriver`) - Moonriver
+- **Aurora** (`Chain::Aurora`) - Aurora
+- **Cronos** (`Chain::Cronos`) - Cronos
+- **Harmony** (`Chain::Harmony`) - Harmony
+- **Kava** (`Chain::Kava`) - Kava
+- **Metis Andromeda** (`Chain::MetisAndromeda`) - Metis Andromeda
+- **Celo** (`Chain::Celo`) - Celo
+- **Telos** (`Chain::Telos`) - Telos EVM
+- **Polygon zkEVM** (`Chain::PolygonZkEVM`) - Polygon zkEVM
+- **Gnosis** (`Chain::Gnosis`) - Gnosis Chain
+- **OpBNB** (`Chain::OpBNB`) - OpBNB
+- **Mantle** (`Chain::Mantle`) - Mantle
+- **Manta** (`Chain::Manta`) - Manta Network
+- **Scroll** (`Chain::Scroll`) - Scroll
+- **Blast** (`Chain::Blast`) - Blast
+- **Mode** (`Chain::Mode`) - Mode
+- **Rootstock** (`Chain::Rootstock`) - Rootstock
+- **Sei** (`Chain::Sei`) - Sei
+- **Gravity** (`Chain::Gravity`) - Gravity
+- **Apechain** (`Chain::Apechain`) - Apechain
+- **Sonic** (`Chain::Sonic`) - Sonic
+- **Berachain** (`Chain::Berachain`) - Berachain
+- **Monad Testnet** (`Chain::MonadTestnet`) - Monad Testnet
+- **UniChain** (`Chain::UniChain`) - UniChain
+- **Flare** (`Chain::Flare`) - Flare
+- **Swell** (`Chain::Swell`) - Swell
+- **HyperEVM** (`Chain::HyperEVM`) - HyperEVM
+- **Plume** (`Chain::Plume`) - Plume
+- **TAC** (`Chain::TAC`) - TAC
+- **zkSync Era** (`Chain::ZkSyncEra`) - zkSync Era
+
+### Non-EVM Chains
+
+- **Solana** (`Chain::Solana`) - Solana
+- **Ontology** (`Chain::Ontology`) - Ontology
+- **Near** (`Chain::Near`) - NEAR Protocol
+- **Starknet** (`Chain::Starknet`) - Starknet
 
 ## API Reference
 
