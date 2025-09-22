@@ -193,18 +193,13 @@ pub struct QuoteSubRouteDex {
 
 
 #[serde_as]
-
+#[serde(rename_all = "camelCase")]
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ReverseQuoteParams {
-    #[serde(rename = "inTokenAddress")]
     pub in_token_address: String,
-    #[serde(rename = "outTokenAddress")]
     pub out_token_address: String,
-    #[serde(rename = "amount")]
     pub amount: String,
-    #[serde(rename = "gasPrice")]
     pub gas_price: String,
-    #[serde(rename = "slippage")]
     pub slippage: Option<String>,
     #[serde_as(as = "Option<StringWithSeparator<CommaSeparator, i32>>")]
     #[serde(rename = "disabledDexIds", skip_serializing_if = "Option::is_none")]
@@ -240,3 +235,58 @@ pub struct ReverseQuoteData {
     #[serde(rename = "reverseAmount", deserialize_with = "de_num_or_str_to_string")]
     pub reverse_amount: String,
 }
+
+
+
+
+
+
+
+#[serde_as]
+#[serde(rename_all = "camelCase")]
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SwapQuoteParams {
+    pub in_token_address: String,
+    pub out_token_address: String,
+    pub amount_decimals: String,
+    pub gas_price_decimals: String,
+    pub slippage: Option<String>,
+    pub account: String,
+    pub referrer: Option<String>,
+    pub referrer_fee: Option<f64>,
+    #[serde_as(as = "Option<StringWithSeparator<CommaSeparator, i32>>")]
+    #[serde(rename = "disabledDexIds", skip_serializing_if = "Option::is_none")]
+    pub disabled_dex_ids: Option<Vec<i32>>,
+    #[serde_as(as = "Option<StringWithSeparator<CommaSeparator, i32>>")]
+    #[serde(rename = "enabledDexIds",  skip_serializing_if = "Option::is_none")]
+    pub enabled_dex_ids: Option<Vec<i32>>,
+    pub sender: Option<String>,
+    pub mint_output: Option<u64>,
+}
+
+
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SwapQuoteData {
+    pub in_token: QuoteToken,
+    pub out_token: QuoteToken,
+
+    pub in_amount: String,
+    pub out_amount: String,
+    #[serde(deserialize_with = "de_num_or_str_to_string")]
+    pub estimated_gas: String,
+    pub min_out_amount: String,
+    pub from: String,
+    pub to: String,
+    pub value: String,
+    pub gas_price: String,
+    pub data: String,
+    pub chain_id: i32,
+    pub rfq_dealine: Option<i32>,
+    pub gmx_fee: i32,
+    #[serde(rename = "price_impact")]
+    pub price_impact: String,
+}
+
+pub type SwapQuoteResponse = BaseResponse<SwapQuoteData>;

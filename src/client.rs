@@ -1,7 +1,7 @@
 use std::time::Duration;
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::{Chain, GetTokenListResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse};
+use crate::{Chain, GetTokenListResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse, SwapQuoteParams, SwapQuoteResponse};
 use reqwest::{Client, Url};
 use crate::{
     GasResponse,
@@ -183,6 +183,12 @@ impl OpenoceanClient {
         let res: ReverseQuoteResponse = self.get_json_with_query(&path, parmas).await?;
         Ok(res)
     }
+
+    pub async fn swap_quote(&self, chain: Chain, params: &SwapQuoteParams) -> Result<SwapQuoteResponse, OpenoceanError> {
+        let path = format!("/v4/{}/swap", chain);
+        let res: SwapQuoteResponse = self.get_json_with_query(&path, params).await?;
+        Ok(res)
+    }
 }
 
 #[cfg(test)]
@@ -238,5 +244,26 @@ mod tests {
 
         assert_eq!(res.code, 200);
         println!("reverse quote: {:?}", res);        
+    }
+
+    #[tokio::test]
+    async fn test_swap_quote() {
+        let client = OpenoceanClient::new(OpenoceanConfig::default()).unwrap();
+        let res = client.swap_quote(Chain::Bsc, &SwapQuoteParams {
+            in_token_address: "0x55d398326f99059ff775485246999027b3197955".to_string(),
+            out_token_address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d".to_string(),
+            amount_decimals: "5000000000000000000".to_string(),
+            gas_price_decimals: "1000000000".to_string(),
+            slippage: Some("1".to_string()),
+            account: "0x9116780aEf4B376499358fa7dEeC00cCF64fA801".to_string(),
+            referrer: Some("0xD4eb4cbB1ECbf96a1F0C67D958Ff6fBbB7B037BB".to_string()),
+            referrer_fee: None,
+            disabled_dex_ids: None,
+            enabled_dex_ids: None,
+            sender: None,
+            mint_output: None,
+        }).await.unwrap();
+        assert_eq!(res.code, 200);
+        println!("swap quote: {:?}", res);
     }
 }
