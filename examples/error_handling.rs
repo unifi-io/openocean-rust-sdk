@@ -58,8 +58,8 @@ fn print_error_details(error: &OpenoceanError) {
             println!("  📡 Network Error: {}", msg);
             println!("  💡 This could be due to connection issues, timeouts, or DNS problems.");
         }
-        OpenoceanError::Http { status, body } => {
-            println!("  🌐 HTTP Error: Status {}, Body: {}", status, body);
+        OpenoceanError::Http { status, body, content_type } => {
+            println!("  🌐 HTTP Error: Status {}, Body: {}, Content-Type: {}", status, body, content_type.as_ref().map(|s| s.as_str()).unwrap_or("unknown"));
             match *status {
                 400 => println!("  💡 Bad Request: Check your request parameters."),
                 401 => println!("  💡 Unauthorized: Check your API credentials."),
@@ -70,8 +70,10 @@ fn print_error_details(error: &OpenoceanError) {
                 _ => println!("  💡 Unknown HTTP error."),
             }
         }
-        OpenoceanError::Parse(msg) => {
-            println!("  🔍 Parse Error: {}", msg);
+        OpenoceanError::Parse { message, path, body } => {
+            println!("  🔍 Parse Error: {}", message);
+            println!("  🔍 Parse Error: {}", path);
+            println!("  🔍 Parse Error: {}", body);
             println!("  💡 This could be due to unexpected response format or JSON parsing issues.");
         }
         OpenoceanError::Internal(msg) => {

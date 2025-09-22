@@ -22,6 +22,8 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal"] }
 thiserror = "2.0.16"
+serde_with = { version = "3.14.1", features = ["macros"] }
+serde_path_to_error = "0.1.20"
 
 [package.metadata.docs.rs]
 all-features = true

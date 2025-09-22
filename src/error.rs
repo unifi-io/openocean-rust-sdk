@@ -8,15 +8,20 @@ pub enum OpenoceanError {
     Network(String),
 
     /// HTTP 非 2xx 状态
-    #[error("http error: status={status}, body={body}")]
+    #[error("http error: status={status}, content_type={content_type:?}, body={body}")]
     Http {
         status: u16,
         body: String,
+        content_type: Option<String>,
     },
 
     /// JSON 解析错误
-    #[error("parse error: {0}")]
-    Parse(String),
+    #[error("parse error at {path}: {message}. body={body}")]
+    Parse {
+        message: String,
+        path: String,
+        body: String,
+    },
 
     /// 其它 SDK 内部错误
     #[error("internal error: {0}")]
@@ -33,8 +38,13 @@ impl From<reqwest::Error> for OpenoceanError {
     }
 }
 
+/*
 impl From<serde_json::Error> for OpenoceanError {
     fn from(err: serde_json::Error) -> Self {
-        OpenoceanError::Parse(err.to_string())
+        OpenoceanError::Parse {
+            message: err.to_string(),
+            path: "".to_string(),
+            body: "".to_string(),
+        }
     }
-}
+}*/
