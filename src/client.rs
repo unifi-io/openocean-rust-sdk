@@ -1,7 +1,7 @@
 use std::time::Duration;
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::{Chain, GetTokenListResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse, SwapQuoteParams, SwapQuoteResponse};
+use crate::{Chain, GetDexListResponse, GetTokenListResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse, SwapQuoteParams, SwapQuoteResponse};
 use reqwest::{Client, Url};
 use crate::{
     GasResponse,
@@ -189,6 +189,12 @@ impl OpenoceanClient {
         let res: SwapQuoteResponse = self.get_json_with_query(&path, params).await?;
         Ok(res)
     }
+
+    pub async fn get_dex_list(&self, chain: Chain) -> Result<GetDexListResponse, OpenoceanError> {
+        let path = format!("/v4/{}/dexList", chain);
+        let res: GetDexListResponse = self.get_json(&path).await?;
+        Ok(res)
+    }
 }
 
 #[cfg(test)]
@@ -202,7 +208,7 @@ mod tests {
         let client = OpenoceanClient::new(OpenoceanConfig::default()).unwrap();
         let res = client.get_token_list(Chain::Bsc).await.unwrap();
         assert_eq!(res.code, 200);
-        println!("token list: {:?}", res);
+        println!("token list: {}", serde_json::to_string_pretty(&res).unwrap());
     }
 
     #[tokio::test]
@@ -210,7 +216,7 @@ mod tests {
         let client = OpenoceanClient::new(OpenoceanConfig::default()).unwrap();
         let res = client.get_price(Chain::Bsc).await.unwrap();
         assert_eq!(res.code, 200);
-        println!("gas price: {:?}", res);
+        println!("gas price: {}", serde_json::to_string_pretty(&res).unwrap());
     }
 
     #[tokio::test]
@@ -226,7 +232,7 @@ mod tests {
             enabled_dex_ids: None,
         }).await.unwrap();
         assert_eq!(res.code, 200);
-        println!("quote: {:?}", res);
+        println!("quote: {}", serde_json::to_string_pretty(&res).unwrap());
     }
 
     #[tokio::test]
@@ -243,7 +249,7 @@ mod tests {
         }).await.unwrap();
 
         assert_eq!(res.code, 200);
-        println!("reverse quote: {:?}", res);        
+        println!("reverse quote: {}", serde_json::to_string_pretty(&res).unwrap());        
     }
 
     #[tokio::test]
@@ -264,6 +270,14 @@ mod tests {
             mint_output: None,
         }).await.unwrap();
         assert_eq!(res.code, 200);
-        println!("swap quote: {:?}", res);
+        println!("swap quote: {}", serde_json::to_string_pretty(&res).unwrap());
+    }
+
+    #[tokio::test]
+    async fn test_get_dex_list() {
+        let client = OpenoceanClient::new(OpenoceanConfig::default()).unwrap();
+        let res = client.get_dex_list(Chain::Bsc).await.unwrap();
+        assert_eq!(res.code, 200);
+        println!("dex list: {}", serde_json::to_string_pretty(&res).unwrap());
     }
 }

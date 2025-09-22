@@ -26,7 +26,7 @@ where
 
 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct BaseResponse<T> {
     #[serde(rename = "code")]
     pub code: i32,
@@ -34,7 +34,7 @@ pub struct BaseResponse<T> {
     pub data: T,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Token {
     #[serde(rename = "id")]
     pub id: i32,
@@ -64,7 +64,7 @@ pub struct Token {
 
 pub type GetTokenListResponse = BaseResponse<Vec<Token>>;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct GasPrice {
     #[serde(rename = "standard")]
     pub standard: f64,
@@ -74,7 +74,7 @@ pub struct GasPrice {
     pub instant: f64,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct GasResponse {
     #[serde(rename = "code")]
     pub code: i32,
@@ -112,7 +112,7 @@ pub struct QuoteParams {
 pub type QuoteResponse = BaseResponse<QuoteData>;
 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QuoteData {
     pub in_token: QuoteToken,
@@ -191,10 +191,9 @@ pub struct QuoteSubRouteDex {
 
 
 
-
-#[serde_as]
-#[serde(rename_all = "camelCase")]
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+#[serde_as]
 pub struct ReverseQuoteParams {
     pub in_token_address: String,
     pub out_token_address: String,
@@ -214,7 +213,7 @@ pub struct ReverseQuoteParams {
 pub type ReverseQuoteResponse = BaseResponse<ReverseQuoteData>;
 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ReverseQuoteData {
     pub in_token: QuoteToken,
@@ -242,9 +241,9 @@ pub struct ReverseQuoteData {
 
 
 
+#[derive(Debug, Deserialize, Serialize)]
 #[serde_as]
 #[serde(rename_all = "camelCase")]
-#[derive(Debug, Deserialize, Serialize)]
 pub struct SwapQuoteParams {
     pub in_token_address: String,
     pub out_token_address: String,
@@ -266,7 +265,7 @@ pub struct SwapQuoteParams {
 
 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SwapQuoteData {
     pub in_token: QuoteToken,
@@ -290,3 +289,14 @@ pub struct SwapQuoteData {
 }
 
 pub type SwapQuoteResponse = BaseResponse<SwapQuoteData>;
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Dex {
+    pub index: i32,
+    pub code: String,
+    pub name: String,
+}
+
+pub type GetDexListResponse = BaseResponse<Vec<Dex>>;
