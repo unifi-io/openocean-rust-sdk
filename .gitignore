@@ -1,0 +1,15 @@
+# Cargo's artifact dir
+/target/
+
+# Server config files
+/svix-server/config.toml
+.env
+
+# IDE
+Session.vim
+
+# MSVC debug files
+*.pdb
+
+# Sometimes convenient to have a tempdir for files not tracked by git
+tmp/
