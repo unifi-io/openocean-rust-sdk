@@ -1,7 +1,7 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::{Chain, GetDexListResponse, GetTokenListResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse, SwapQuoteParams, SwapQuoteResponse};
+use crate::{Chain, GetDexListResponse, GetTokenListResponse, GetTransactionResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse, SwapQuoteParams, SwapQuoteResponse};
 use reqwest::{Client, Url};
 use crate::{
     GasResponse,
@@ -195,6 +195,15 @@ impl OpenoceanClient {
         let res: GetDexListResponse = self.get_json(&path).await?;
         Ok(res)
     }
+
+    pub async fn get_transaction(&self, chain: Chain, hash: String) -> Result<GetTransactionResponse, OpenoceanError> {
+        let mut query = HashMap::new();
+        query.insert("hash", hash);
+
+        let path = format!("/v4/{}/getTransaction", chain);
+        let res: GetTransactionResponse = self.get_json_with_query(&path, &query).await?;
+        Ok(res)
+    }
 }
 
 #[cfg(test)]
@@ -279,5 +288,13 @@ mod tests {
         let res = client.get_dex_list(Chain::Bsc).await.unwrap();
         assert_eq!(res.code, 200);
         println!("dex list: {}", serde_json::to_string_pretty(&res).unwrap());
+    }
+
+    #[tokio::test]
+    async fn test_get_transaction() {
+        let client = OpenoceanClient::new(OpenoceanConfig::default()).unwrap();
+        let res = client.get_transaction(Chain::Bsc, "0x756b98a89714be5c640ea9922aba12e0c94bc30e5a17e111d1aa40373cc24782".to_string()).await.unwrap();
+        assert_eq!(res.code, 200);
+        println!("transaction: {}", serde_json::to_string_pretty(&res).unwrap());
     }
 }

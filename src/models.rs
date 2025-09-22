@@ -300,3 +300,44 @@ pub struct Dex {
 }
 
 pub type GetDexListResponse = BaseResponse<Vec<Dex>>;
+
+
+
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Transaction {
+    pub id: i64,
+    pub tx_id: Option<String>,
+    pub block_number: u64,
+    pub tx_index: u64,
+    pub address: String,
+    pub tx_hash: String,
+    pub tx_hash_url: String,
+    pub sender: String,
+    pub receiver: String,
+    pub in_token_address: String,
+    pub in_token_symbol: String,
+    pub out_token_address: String,
+    pub out_token_symbol: String,
+    pub referrer: String,
+    pub in_amount: String,
+    pub out_amount: String,
+    pub fee: Option<String>,
+    pub referrer_fee: Option<String>,
+    pub usd_valuation: f64,
+    pub create_at: String,
+    pub update_at: String,
+    pub tx_fee: String,
+    pub tx_fee_valuation: String,
+    pub in_token_decimals: u8,
+    pub out_token_decimals: u8,
+    pub in_amount_value: String,
+    pub out_amount_value: String,
+    pub tx_profit: String,
+    pub tx_profit_valuation: String,
+    pub platform: Option<String>,
+    pub status: i32,
+}
+
+
+pub type GetTransactionResponse = BaseResponse<Transaction>;
