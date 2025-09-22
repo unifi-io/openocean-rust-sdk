@@ -13,16 +13,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     println!("=== OpenOcean SDK Multi-Chain Example ===\n");
     
-    let chains = vec![
+    // EVM-Compatible chains
+    let evm_chains = vec![
         (Chain::Eth, "Ethereum"),
-        (Chain::Bsc, "Binance Smart Chain"), 
-        (Chain::ZkSyncEra, "zkSync Era"),
+        (Chain::Bsc, "Binance Smart Chain"),
+        (Chain::Arbitrum, "Arbitrum One"),
         (Chain::Polygon, "Polygon"),
         (Chain::Base, "Base"),
         (Chain::Linea, "Linea"),
         (Chain::Fantom, "Fantom"),
         (Chain::Avalanche, "Avalanche"),
-        (Chain::Arbitrum, "Arbitrum"),
         (Chain::Optimism, "Optimism"),
         (Chain::Moonriver, "Moonriver"),
         (Chain::Aurora, "Aurora"),
@@ -31,15 +31,48 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         (Chain::Kava, "Kava"),
         (Chain::MetisAndromeda, "Metis Andromeda"),
         (Chain::Celo, "Celo"),
+        (Chain::ZkSyncEra, "zkSync Era"),
+        (Chain::Telos, "Telos EVM"),
+        (Chain::PolygonZkEVM, "Polygon zkEVM"),
+        (Chain::Gnosis, "Gnosis Chain"),
+        (Chain::OpBNB, "OpBNB"),
+        (Chain::Mantle, "Mantle"),
+        (Chain::Manta, "Manta Network"),
+        (Chain::Scroll, "Scroll"),
+        (Chain::Blast, "Blast"),
+        (Chain::Mode, "Mode"),
+        (Chain::Rootstock, "Rootstock"),
+        (Chain::Sei, "Sei"),
+        (Chain::Gravity, "Gravity"),
+        (Chain::Apechain, "Apechain"),
+        (Chain::Sonic, "Sonic"),
+        (Chain::Berachain, "Berachain"),
+        (Chain::MonadTestnet, "Monad Testnet"),
+        (Chain::UniChain, "UniChain"),
+        (Chain::Flare, "Flare"),
+        (Chain::Swell, "Swell"),
+        (Chain::HyperEVM, "HyperEVM"),
+        (Chain::Plume, "Plume"),
+        (Chain::TAC, "TAC"),
+    ];
+    
+    // Non-EVM chains
+    let non_evm_chains = vec![
+        (Chain::Solana, "Solana"),
+        (Chain::Ontology, "Ontology"),
+        (Chain::Near, "NEAR Protocol"),
+        (Chain::Starknet, "Starknet"),
     ];
     
     // Get gas prices for all supported chains
     println!("Getting gas prices for all supported chains...\n");
+    println!("Note: This example will test all {} EVM-compatible chains", evm_chains.len());
+    println!("For demonstration purposes, we'll limit to first 10 chains to avoid overwhelming output.\n");
     
-    for (chain, name) in chains {
+    for (chain, name) in evm_chains.iter().take(10) {
         println!("--- {} ---", name);
         
-        match client.get_price(chain).await {
+        match client.get_price(*chain).await {
             Ok(gas_response) => {
                 println!("✅ Gas prices:");
                 println!("  Standard: {:.2} Gwei", gas_response.data.standard);
@@ -57,17 +90,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Get token count for each chain
     println!("Getting token counts for all supported chains...\n");
     
-    let chains_for_tokens = vec![
-        (Chain::Eth, "Ethereum"),
-        (Chain::Bsc, "Binance Smart Chain"),
-        (Chain::Arbitrum, "Arbitrum One"),
-        (Chain::Polygon, "Polygon"),
-    ];
-    
-    for (chain, name) in chains_for_tokens {
+    for (chain, name) in evm_chains.iter().take(5) {
         println!("--- {} Token Count ---", name);
         
-        match client.get_token_list(chain).await {
+        match client.get_token_list(*chain).await {
             Ok(token_list) => {
                 println!("✅ Total tokens: {}", token_list.data.len());
                 
@@ -95,6 +121,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         
         println!();
+    }
+    
+    // Summary of all supported chains
+    println!("=== Summary ===");
+    println!("Total EVM-compatible chains supported: {}", evm_chains.len());
+    println!("Total non-EVM chains supported: {}", non_evm_chains.len());
+    println!("Total chains supported: {}", evm_chains.len() + non_evm_chains.len());
+    
+    println!("\nAll supported chains:");
+    println!("EVM-Compatible:");
+    for (_, name) in &evm_chains {
+        println!("  - {}", name);
+    }
+    
+    println!("\nNon-EVM:");
+    for (_, name) in &non_evm_chains {
+        println!("  - {}", name);
     }
     
     Ok(())
