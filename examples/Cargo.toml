@@ -1,0 +1,20 @@
+[package]
+name = "openocean-sdk-examples"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "basic_usage"
+path = "basic_usage.rs"
+
+[[bin]]
+name = "multi_chain"
+path = "multi_chain.rs"
+
+[[bin]]
+name = "error_handling"
+path = "error_handling.rs"
+
+[dependencies]
+openocean-sdk = { path = ".." }
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros"] }
