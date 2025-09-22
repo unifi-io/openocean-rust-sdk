@@ -1,9 +1,8 @@
 use std::time::Duration;
 use serde::de::DeserializeOwned;
 
-use crate::OpenoceanError;
+use crate::{Chain, OpenoceanError};
 use reqwest::{Client, Url};
-use std::fmt;
 use crate::{
     OpenoceanBaseResponse, OpenoceanToken, OpenoceanGasResponse,
 };
@@ -62,27 +61,6 @@ impl OpenoceanConfigBuilder {
             timeout: self.timeout.unwrap_or(Duration::from_secs(30)),
             user_agent: self.user_agent.or_else(|| Some(format!("openocean-rs/{}", env!("CARGO_PKG_VERSION")))),
         }
-    }
-}
-
-
-#[derive(Clone, Copy, Debug)]
-pub enum Chain {
-    Eth,
-    Bsc,
-    Arbitrum,
-    Polygon,
-}
-
-impl fmt::Display for Chain {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let s = match self {
-            Chain::Eth => "eth",
-            Chain::Bsc => "bsc",
-            Chain::Arbitrum => "arbitrum",
-            Chain::Polygon => "polygon",
-        };
-        f.write_str(s)
     }
 }
 
@@ -146,6 +124,8 @@ impl OpenoceanClient {
 
 #[cfg(test)]
 mod tests {
+    use crate::Chain;
+
     use super::*;
 
     #[tokio::test]

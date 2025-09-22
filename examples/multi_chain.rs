@@ -15,9 +15,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     let chains = vec![
         (Chain::Eth, "Ethereum"),
-        (Chain::Bsc, "Binance Smart Chain"),
-        (Chain::Arbitrum, "Arbitrum One"),
+        (Chain::Bsc, "Binance Smart Chain"), 
+        (Chain::ZkSyncEra, "zkSync Era"),
         (Chain::Polygon, "Polygon"),
+        (Chain::Base, "Base"),
+        (Chain::Linea, "Linea"),
+        (Chain::Fantom, "Fantom"),
+        (Chain::Avalanche, "Avalanche"),
+        (Chain::Arbitrum, "Arbitrum"),
+        (Chain::Optimism, "Optimism"),
+        (Chain::Moonriver, "Moonriver"),
+        (Chain::Aurora, "Aurora"),
+        (Chain::Cronos, "Cronos"),
+        (Chain::Harmony, "Harmony"),
+        (Chain::Kava, "Kava"),
+        (Chain::MetisAndromeda, "Metis Andromeda"),
+        (Chain::Celo, "Celo"),
     ];
     
     // Get gas prices for all supported chains
