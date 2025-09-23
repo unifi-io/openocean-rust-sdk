@@ -2,6 +2,8 @@ use serde::{Deserialize, Deserializer, Serialize};
 use serde_json::Number;
 use serde_with::{serde_as, StringWithSeparator, formats::CommaSeparator};
 
+use crate::types::U128;
+
 
 
 
@@ -35,50 +37,36 @@ pub struct BaseResponse<T> {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Token {
-    #[serde(rename = "id")]
     pub id: i32,
-    #[serde(rename = "code")]
     pub code: String,
-    #[serde(rename = "name")]
     pub name: String,
-    #[serde(rename = "address")]
     pub address: String,
-    #[serde(rename = "decimals")]
     pub decimals: u8,
-    #[serde(rename = "symbol")]
     pub symbol: String,
-    #[serde(rename = "icon")]
     pub icon: String,
-    #[serde(rename = "chain")]
     pub chain: String,
-    #[serde(rename = "createtime")]
     pub create_time: String,
-    #[serde(rename = "chainId")]
     pub chain_id: Option<i32>,
-    #[serde(rename = "customSymbol")]
     pub custom_symbol: Option<String>,
-    #[serde(rename = "customAddress")]
     pub custom_address: Option<String>,
 }
 
 pub type GetTokenListResponse = BaseResponse<Vec<Token>>;
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GasPrice {
-    #[serde(rename = "standard")]
     pub standard: f64,
-    #[serde(rename = "fast")]
     pub fast: f64,
-    #[serde(rename = "instant")]
     pub instant: f64,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GasResponse {
-    #[serde(rename = "code")]
     pub code: i32,
-    #[serde(rename = "data")]
     pub data: GasPrice,
     #[serde(rename = "without_decimals")]
     pub without_decimals: GasPrice,
@@ -86,19 +74,14 @@ pub struct GasResponse {
 
 
 
-#[serde_as]
-
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+#[serde_as]
 pub struct QuoteParams {
-    #[serde(rename = "inTokenAddress")]
     pub in_token_address: String,
-    #[serde(rename = "outTokenAddress")]
     pub out_token_address: String,
-    #[serde(rename = "amountDecimals")]
     pub amount_decimals: String,
-    #[serde(rename = "gasPriceDecimals")]
     pub gas_price_decimals: String,
-    #[serde(rename = "slippage")]
     pub slippage: Option<String>,
     #[serde_as(as = "Option<StringWithSeparator<CommaSeparator, i32>>")]
     #[serde(rename = "disabledDexIds", skip_serializing_if = "Option::is_none")]
@@ -117,16 +100,12 @@ pub type QuoteResponse = BaseResponse<QuoteData>;
 pub struct QuoteData {
     pub in_token: QuoteToken,
     pub out_token: QuoteToken,
-
     pub in_amount: String,
     pub out_amount: String,
     pub estimated_gas: String,
-
     #[serde(default)]
     pub dexes: Vec<QuoteDex>,
-
     pub path: QuotePath,
-
     pub save: f64,
     #[serde(rename = "price_impact")]
     pub price_impact: String, // e.g.: "0.01%"
@@ -218,23 +197,18 @@ pub type ReverseQuoteResponse = BaseResponse<ReverseQuoteData>;
 pub struct ReverseQuoteData {
     pub in_token: QuoteToken,
     pub out_token: QuoteToken,
-
     pub in_amount: String,
     pub out_amount: String,
     pub estimated_gas: String,
-
     #[serde(default)]
     pub dexes: Vec<QuoteDex>,
-
     pub path: QuotePath,
-
     pub save: f64,
     #[serde(rename = "price_impact")]
     pub price_impact: String, // e.g.: "0.01%"
     #[serde(rename = "reverseAmount", deserialize_with = "de_num_or_str_to_string")]
     pub reverse_amount: String,
 }
-
 
 
 
@@ -341,3 +315,79 @@ pub struct Transaction {
 
 
 pub type GetTransactionResponse = BaseResponse<Transaction>;
+
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct DecodeInputDataResponse {
+    pub caller: String,
+    pub desc: SwapDesc,
+    pub calls: Vec<CallStep>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SwapDesc {
+    pub src_token: String,
+    pub dst_token: String,
+    pub src_receiver: String,
+    pub dst_receiver: String,
+
+    pub amount: String,
+    pub min_return_amount: String,
+    pub guaranteed_amount: String,
+    pub flags: String,
+    pub referrer: String,
+    pub permit: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CallStep {
+    pub target: String,
+    pub gas_limit: String,
+    pub value: String,
+    pub data: String,
+}
+
+
+
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GasPriceResponse {
+    pub code: u32,
+    pub data: GasPriceData,
+    // pub without_decimals: GasPriceData,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GasPriceData {
+    NonEvm(GasPriceDataNonEvm),
+    Evm(GasPriceDataEvm),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GasPriceDataEvm {
+    pub base: f64,
+    pub standard: GasPriceTierInt,
+    pub fast: GasPriceTierInt,
+    pub instant: GasPriceTierInt,
+    pub low: GasPriceTierInt,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GasPriceTierInt {
+    pub legacy_gas_price: U128,
+    pub max_priority_fee_per_gas: U128,
+    pub max_fee_per_gas: U128,
+    pub wait_time_estimate: U128,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GasPriceDataNonEvm {
+    pub standard: f64,
+    pub fast: f64,
+    pub instant: f64,
+}

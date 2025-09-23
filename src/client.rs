@@ -1,7 +1,7 @@
 use std::{collections::HashMap, time::Duration};
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::{Chain, GetDexListResponse, GetTokenListResponse, GetTransactionResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse, SwapQuoteParams, SwapQuoteResponse};
+use crate::{Chain, DecodeInputDataResponse, GasPriceResponse, GetDexListResponse, GetTokenListResponse, GetTransactionResponse, OpenoceanError, QuoteParams, QuoteResponse, ReverseQuoteParams, ReverseQuoteResponse, SwapQuoteParams, SwapQuoteResponse};
 use reqwest::{Client, Url};
 use crate::{
     GasResponse,
@@ -204,6 +204,22 @@ impl OpenoceanClient {
         let res: GetTransactionResponse = self.get_json_with_query(&path, &query).await?;
         Ok(res)
     }
+
+    pub async fn decode_input_data(&self, chain: Chain, data: String, method: String) -> Result<DecodeInputDataResponse, OpenoceanError> {
+        let mut query = HashMap::new();
+        query.insert("data", data);
+        query.insert("method", method);
+
+        let path = format!("/v4/{}/decodeInputData", chain);
+        let res: DecodeInputDataResponse = self.get_json_with_query(&path, &query).await?;
+        Ok(res)
+    }
+
+    pub async fn get_gas_price(&self, chain: Chain) -> Result<GasPriceResponse, OpenoceanError> {
+        let path = format!("/v4/{}/gasPrice", chain);
+        let res: GasPriceResponse = self.get_json(&path).await?;
+        Ok(res)
+    }
 }
 
 #[cfg(test)]
@@ -296,5 +312,24 @@ mod tests {
         let res = client.get_transaction(Chain::Bsc, "0x756b98a89714be5c640ea9922aba12e0c94bc30e5a17e111d1aa40373cc24782".to_string()).await.unwrap();
         assert_eq!(res.code, 200);
         println!("transaction: {}", serde_json::to_string_pretty(&res).unwrap());
+    }
+
+    #[tokio::test]
+    async fn test_decode_input_data() {
+        let client = OpenoceanClient::new(OpenoceanConfig::default()).unwrap();
+        let res = client.decode_input_data(Chain::Bsc, "000000xxxxxx".to_string(), "swap".to_string()).await.unwrap();
+        println!("decode input data: {}", serde_json::to_string_pretty(&res).unwrap());
+    }
+
+    #[tokio::test]
+    async fn test_get_gas_price() {
+        let client = OpenoceanClient::new(OpenoceanConfig::default()).unwrap();
+        let res = client.get_gas_price(Chain::Bsc).await.unwrap();
+        assert_eq!(res.code, 200);
+        println!("gas price: {}", serde_json::to_string_pretty(&res).unwrap());
+
+        let res = client.get_gas_price(Chain::Eth).await.unwrap();
+        assert_eq!(res.code, 200);
+        println!("gas price: {}", serde_json::to_string_pretty(&res).unwrap());
     }
 }

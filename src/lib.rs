@@ -4,6 +4,7 @@ mod error;
 mod chain;
 mod models;
 mod client;
+mod types;
 
 pub use error::*;
 pub use chain::*;
