@@ -1,12 +1,14 @@
 use std::fmt;
 use std::convert::TryFrom;
 
+use serde::{Deserialize, Serialize};
+
 use crate::OpenoceanError;
 
 // https://apis.openocean.finance/developer/apis/supported-chains
 
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum Chain {
     Eth,
     Bsc,
