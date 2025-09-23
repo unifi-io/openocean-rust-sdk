@@ -38,7 +38,11 @@ impl<'de> Deserialize<'de> for U128 {
     }
 }
 
-
+impl fmt::Display for U128 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
 
 
 
@@ -66,5 +70,11 @@ impl<'de> Deserialize<'de> for F64 {
             }
         }
         de.deserialize_any(V)
+    }
+}
+
+impl fmt::Display for F64 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
