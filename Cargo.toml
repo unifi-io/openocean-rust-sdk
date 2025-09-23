@@ -12,7 +12,6 @@ path = "src/lib.rs"
 
 [features]
 default = ["rustls-tls"]
-# 只启用一种 TLS 特性即可；给用户可切换的选项
 rustls-tls = ["reqwest/rustls-tls"]
 native-tls = ["reqwest/native-tls"]
 
