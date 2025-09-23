@@ -355,8 +355,9 @@ pub struct CallStep {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GasPriceResponse {
     pub code: u32,
-    pub data: GasPriceData,
-    pub without_decimals: GasPriceData,
+    pub data: Option<GasPriceData>,
+    pub without_decimals: Option<GasPriceData>,
+    pub error_msg: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
