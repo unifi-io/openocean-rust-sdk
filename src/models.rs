@@ -356,7 +356,7 @@ pub struct CallStep {
 pub struct GasPriceResponse {
     pub code: u32,
     pub data: GasPriceData,
-    // pub without_decimals: GasPriceData,
+    pub without_decimals: GasPriceData,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
