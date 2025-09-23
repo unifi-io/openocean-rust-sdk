@@ -47,6 +47,7 @@ pub struct Token {
     pub symbol: String,
     pub icon: String,
     pub chain: String,
+    #[serde(rename = "createtime")]
     pub create_time: String,
     pub chain_id: Option<i32>,
     pub custom_symbol: Option<String>,

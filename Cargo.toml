@@ -1,6 +1,6 @@
 [package]
 name = "openocean-sdk"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 repository = "https://github.com/unifi-io/openocean-rust-sdk"
 
