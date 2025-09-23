@@ -35,7 +35,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Try to get token list
     match client.get_token_list(Chain::Bsc).await {
         Ok(token_list) => {
-            println!("✅ Token list retrieved: {} tokens", token_list.data.len());
+            let token_list = token_list.data.unwrap();
+            println!("✅ Token list retrieved: {} tokens", token_list.len());
         }
         Err(e) => {
             println!("❌ Error getting token list: {}", e);

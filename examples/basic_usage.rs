@@ -26,12 +26,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Get BSC chain token list
     println!("Getting BSC chain token list...");
     match client.get_token_list(Chain::Bsc).await {
-        Ok(token_list) => {
-            println!("✅ Token list retrieved successfully, {} tokens found", token_list.data.len());
+        Ok(res) => {
+            let token_list = res.data.unwrap();
+            println!("✅ Token list retrieved successfully, {} tokens found", token_list.len());
             
             // Display first 5 tokens
             println!("First 5 tokens:");
-            for (i, token) in token_list.data.iter().take(5).enumerate() {
+            for (i, token) in token_list.iter().take(5).enumerate() {
                 println!("  {}. {} ({})", i + 1, token.name, token.symbol);
                 println!("     Address: {}", token.address);
                 println!("     Decimals: {}", token.decimals);

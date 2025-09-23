@@ -95,10 +95,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         
         match client.get_token_list(*chain).await {
             Ok(token_list) => {
-                println!("✅ Total tokens: {}", token_list.data.len());
+                let token_list = token_list.data.unwrap();
+                println!("✅ Total tokens: {}", token_list.len());
                 
                 // Show some popular tokens if available
-                let popular_tokens: Vec<_> = token_list.data
+                let popular_tokens: Vec<_> = token_list
                     .iter()
                     .filter(|token| {
                         let symbol = token.symbol.to_lowercase();
