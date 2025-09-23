@@ -29,11 +29,11 @@ where
 
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BaseResponse<T> {
-    #[serde(rename = "code")]
     pub code: i32,
-    #[serde(rename = "data")]
-    pub data: T,
+    pub data: Option<T>,
+    pub error_msg: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
