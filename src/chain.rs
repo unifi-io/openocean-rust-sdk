@@ -1,4 +1,7 @@
 use std::fmt;
+use std::convert::TryFrom;
+
+use crate::OpenoceanError;
 
 // https://apis.openocean.finance/developer/apis/supported-chains
 
@@ -103,5 +106,43 @@ impl fmt::Display for Chain {
             // Sui => "sui",
         };
         f.write_str(s)
+    }
+}
+
+
+impl TryFrom<String> for Chain {
+    type Error = OpenoceanError;
+
+    fn try_from(chain: String) -> Result<Self, Self::Error> {
+        match chain.as_str() {
+            "1" | "eth" => Ok(Chain::Eth),
+            "56" | "bsc" => Ok(Chain::Bsc),
+            "137" | "polygon" => Ok(Chain::Polygon),
+            "42161" | "arbitrum" => Ok(Chain::Arbitrum),
+            "10" | "optimism" => Ok(Chain::Optimism),
+            "250" | "fantom" => Ok(Chain::Fantom),
+            "43114" | "avalanche" => Ok(Chain::Avalanche),
+            "100" | "gnosis" => Ok(Chain::Gnosis),
+            "59144" | "cronos" => Ok(Chain::Cronos),
+            "1666600000" | "harmony" => Ok(Chain::Harmony),
+            "2000" | "kava" => Ok(Chain::Kava),
+            "1088" | "metis" => Ok(Chain::MetisAndromeda),
+            "42220" | "celo" => Ok(Chain::Celo),
+            "42261" | "telos" => Ok(Chain::Telos),
+            "1313161554" | "polygon_zkevm" => Ok(Chain::PolygonZkEVM),
+            "500" | "opbnb" => Ok(Chain::OpBNB),
+            "501" | "mantle" => Ok(Chain::Mantle),
+            "502" | "manta" => Ok(Chain::Manta),
+            "503" | "scroll" => Ok(Chain::Scroll),
+            "504" | "blast" => Ok(Chain::Blast),
+            "505" | "mode" => Ok(Chain::Mode),
+            "506" | "rootstock" => Ok(Chain::Rootstock),
+            "507" | "sei" => Ok(Chain::Sei),
+            "508" | "gravity" => Ok(Chain::Gravity),
+            "509" | "ape" => Ok(Chain::Apechain),
+            "510" | "sonic" => Ok(Chain::Sonic),
+            "511" | "bera" => Ok(Chain::Berachain),
+            _ => Err(OpenoceanError::Internal(format!("Unsupported chain: {}", chain))),
+        }
     }
 }
