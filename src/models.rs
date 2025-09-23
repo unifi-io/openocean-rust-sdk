@@ -1,6 +1,6 @@
 use serde::{Deserialize, Deserializer, Serialize};
 use serde_json::Number;
-use serde_with::{serde_as, StringWithSeparator, formats::CommaSeparator};
+use serde_with::serde_as;
 
 use crate::types::U128;
 
