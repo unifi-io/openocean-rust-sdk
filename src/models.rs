@@ -388,7 +388,7 @@ pub struct GasPriceTierInt {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GasPriceDataNonEvm {
-    pub standard: f64,
-    pub fast: f64,
-    pub instant: f64,
+    pub standard: U128,
+    pub fast: U128,
+    pub instant: U128,
 }
