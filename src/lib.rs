@@ -5,8 +5,9 @@ mod chain;
 mod models;
 mod client;
 mod types;
+mod api;
 
 pub use error::*;
 pub use chain::*;
-pub use models::*;
 pub use client::*;
+pub use api::*;

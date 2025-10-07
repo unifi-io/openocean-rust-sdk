@@ -2,7 +2,7 @@ use serde::{Deserialize, Deserializer, Serialize};
 use serde_json::Number;
 use serde_with::serde_as;
 
-use crate::types::U128;
+use crate::{models::base::BaseResponse, types::U128};
 
 
 
@@ -28,13 +28,7 @@ where
 
 
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct BaseResponse<T> {
-    pub code: i32,
-    pub data: Option<T>,
-    pub error_msg: Option<String>,
-}
+
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -133,6 +127,7 @@ pub struct QuoteDex {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct QuotePath {
     pub from: String,
     pub to: String,

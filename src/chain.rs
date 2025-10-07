@@ -148,3 +148,38 @@ impl TryFrom<String> for Chain {
         }
     }
 }
+
+impl From<Chain> for i32 {
+    fn from(chain: Chain) -> Self {
+        match chain {
+            Chain::Eth => 1,
+            Chain::Bsc => 56,
+            Chain::Polygon => 137,
+            Chain::Arbitrum => 42161,
+            Chain::Optimism => 10,
+            Chain::Fantom => 250,
+            Chain::Avalanche => 43114,
+            Chain::Gnosis => 100,
+            Chain::Cronos => 59144,
+            Chain::Harmony => 1666600000,
+            Chain::Kava => 2000,
+            Chain::MetisAndromeda => 1088,
+            Chain::Celo => 42220,
+            Chain::Telos => 42261,
+            Chain::PolygonZkEVM => 1313161554,
+            Chain::OpBNB => 500,
+            Chain::Mantle => 501,
+            Chain::Manta => 502,
+            Chain::Scroll => 503,
+            Chain::Blast => 504,
+            Chain::Mode => 505,
+            Chain::Rootstock => 506,
+            Chain::Sei => 507,
+            Chain::Gravity => 508,
+            Chain::Apechain => 509,
+            Chain::Sonic => 510,
+            Chain::Berachain => 511,
+            _ => 0,
+        }
+    }
+}
