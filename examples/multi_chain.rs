@@ -10,6 +10,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build();
     
     let client = OpenoceanClient::new(config)?;
+    let swap = Swap::new(&client);
     
     println!("=== OpenOcean SDK Multi-Chain Example ===\n");
     
@@ -72,7 +73,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for (chain, name) in evm_chains.iter().take(10) {
         println!("--- {} ---", name);
         
-        match client.get_price(*chain).await {
+        match swap.get_price(*chain).await {
             Ok(gas_response) => {
                 println!("✅ Gas prices:");
                 println!("  Standard: {:.2} Gwei", gas_response.data.standard);
@@ -93,7 +94,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for (chain, name) in evm_chains.iter().take(5) {
         println!("--- {} Token Count ---", name);
         
-        match client.get_token_list(*chain).await {
+        match swap.get_token_list(*chain).await {
             Ok(token_list) => {
                 let token_list = token_list.data.unwrap();
                 println!("✅ Total tokens: {}", token_list.len());

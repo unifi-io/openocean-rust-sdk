@@ -1,4 +1,4 @@
-use openocean_sdk::{OpenoceanClient, OpenoceanConfig, Chain, OpenoceanError};
+use openocean_sdk::{Chain, OpenoceanClient, OpenoceanConfig, OpenoceanError, Swap};
 use std::time::Duration;
 
 #[tokio::main]
@@ -15,7 +15,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // Example 1: Successful request
     println!("1. Successful request:");
-    match client.get_price(Chain::Bsc).await {
+    let swap = Swap::new(&client);
+    match swap.get_price(Chain::Bsc).await {
         Ok(gas_response) => {
             println!("✅ Success! Gas prices retrieved:");
             println!("  Standard: {} Gwei", gas_response.data.standard);
@@ -33,7 +34,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("2. Error handling examples:");
     
     // Try to get token list
-    match client.get_token_list(Chain::Bsc).await {
+    match swap.get_token_list(Chain::Bsc).await {
         Ok(token_list) => {
             let token_list = token_list.data.unwrap();
             println!("✅ Token list retrieved: {} tokens", token_list.len());
@@ -92,7 +93,8 @@ async fn demonstrate_error_types() {
         .build();
     
     if let Ok(client) = OpenoceanClient::new(invalid_config) {
-        match client.get_price(Chain::Bsc).await {
+        let swap = Swap::new(&client);
+        match swap.get_price(Chain::Bsc).await {
             Err(OpenoceanError::Network(msg)) => {
                 println!("✅ Network error caught: {}", msg);
             }
